@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeDuel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Particules de fond -->
+  <div id="particules"></div>
+
+  <!-- Ecran d'accueil -->
+  <div id="ecran-accueil" class="ecran actif">
+    <div class="logo">
+      <h1>⚡ CodeDuel</h1>
+      <p class="slogan">Le quiz de programmation en temps réel</p>
+    </div>
+    <div class="stats-accueil">
+      <div class="stat-item">
+        <span class="stat-nombre">20</span>
+        <span class="stat-texte">joueurs</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-nombre">300F</span>
+        <span class="stat-texte">mise</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-nombre">5000F</span>
+        <span class="stat-texte">à gagner</span>
+      </div>
+    </div>
+    <button id="btn-jouer" class="btn-principal">🎮 Rejoindre la partie</button>
+  </div>
+
+  <!-- Ecran d'inscription -->
+  <div id="ecran-inscription" class="ecran">
+    <div class="logo">
+      <h1>👤 Inscription</h1>
+      <p class="slogan">Entre tes infos pour rejoindre la partie</p>
+    </div>
+    <div class="formulaire">
+      <input type="text" id="input-nom" placeholder="Ton prénom" class="input-champ">
+      <input type="tel" id="input-telephone" placeholder="Ton numéro (ex: 97000000)" class="input-champ">
+      <button id="btn-inscrire" class="btn-principal">✅ Rejoindre</button>
+    </div>
+  </div>
+
+  <!-- Ecran attente paiement -->
+<div id="ecran-paiement" class="ecran">
+  <div class="logo">
+    <h1>💳 Paiement</h1>
+    <p class="slogan">Complete ton paiement de 300 FCFA</p>
+  </div>
+  <div class="paiement-info">
+    <div class="paiement-montant">300 FCFA</div>
+    <p class="paiement-texte">Une page de paiement s'est ouverte.<br>Complete le paiement pour rejoindre la partie.</p>
+    <div class="spinner"></div>
+    <p class="paiement-attente">Vérification du paiement en cours...</p>
+  </div>
+</div>
+
+ <!-- Salle d'attente -->
+<div id="ecran-salle" class="ecran">
+  <div class="salle-top">
+    <div class="salle-gauche">
+      <div class="salle-titre">⏳ Salle d'attente</div>
+      <div class="salle-compteur" id="salle-nombre">0 / 20</div>
+      <div id="compte-rebours" class="compte-rebours"></div>
+      <div id="salle-joueurs" class="salle-joueurs"></div>
+    </div>
+    <div class="salle-droite">
+      <div class="chat-box">
+        <div class="chat-titre">💬 Chat en direct</div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ton message..." maxlength="100">
+          <button id="chat-envoyer" class="chat-btn">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Ecran de jeu -->
+  <div id="ecran-jeu" class="ecran">
+    <div class="jeu-header">
+      <div class="progression">
+        <span id="num-question">Question 1</span>
+        <span id="sur-total">/ 100</span>
+      </div>
+      <div id="chrono" class="chrono">10</div>
+      <div class="score-affichage">
+        <span>Score :</span>
+        <span id="score-actuel">0</span>
+      </div>
+    </div>
+    <div class="barre-progression">
+      <div id="barre-remplissage"></div>
+    </div>
+    <div id="question-texte" class="question-texte"></div>
+    <div id="choix-container" class="choix-container"></div>
+    <div id="classement-live" class="classement-live">
+    <div class="classement-titre">🏆 Classement live</div>
+    <div id="classement-liste"></div>
+</div>
+  </div>
+
+  <!-- Ecran de résultats -->
+  <div id="ecran-resultat" class="ecran">
+    <div id="resultat-contenu"></div>
+    <button id="btn-rejouer" class="btn-principal">🔄 Rejouer</button>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
