@@ -555,15 +555,17 @@ socket.on('partie-demarree', () => {
   demarrerJeu();
 });
 
-// Classement en temps réel
 socket.on('classement', (data) => {
-  dernierClassement = data; // ajoute cette ligne
+  dernierClassement = data;
   const liste = document.getElementById('classement-liste');
-  const classementEl = document.getElementById('classement-live');
-  if (classementEl) {
-    classementEl.innerHTML = data
-     .map(j => ' ' + j.rang + '. ' + j.nom + ' — ' + j.score + ' pts ') .join('');
-  }
+  if (!liste) return;
+  liste.innerHTML = data.slice(0, 5).map((j, i) => 
+    '<div class="rang-item">' +
+      '<span class="rang-numero">' + (i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : j.rang+'.') + '</span>' +
+      '<span class="rang-nom">' + j.nom + '</span>' +
+      '<span class="rang-score">' + j.score + ' pts</span>' +
+    '</div>'
+  ).join('');
 });
 
 // ===================================================
@@ -591,12 +593,13 @@ async function inscrireJoueur(nom, telephone) {
     } else {
       // Si déjà inscrit, essayer la connexion
       const reponse2 = await fetch('https://codeduel-backend.onrender.com/api/joueurs/connexion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telephone })
-      });
-      const data2 = await reponse2.json();
-      return data2.joueur;
+      method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ telephone })
+});
+const data2 = await reponse2.json();
+if (data2.joueur) return data2.joueur;
+return existe ? existe : null;
     }
   } catch (err) {
     console.error('Erreur inscription:', err);
