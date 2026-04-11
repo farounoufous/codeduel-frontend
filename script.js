@@ -626,7 +626,7 @@ function afficherEcranPaiement(transactionId) {
   // Vérifier le paiement toutes les 5 secondes
   const verification = setInterval(async () => {
     try {
-      const reponse = await fetch('https://codeduel-backend.onrender.com:3000/api/paiement/verifier/' + transactionId);
+      const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
       const data = await reponse.json();
 
       if (data.approuve) {
@@ -790,7 +790,7 @@ function afficherPauseClassement() {
   document.body.appendChild(overlay);
 
   // Compte à rebours de 3 secondes
-  let compte = 3;
+  let compte = 5;
   const timer = setInterval(() => {
     compte--;
     const compteEl = document.getElementById('pause-compte');
