@@ -608,35 +608,18 @@ return null;
 }
 
 async function rejoindreSalle(nom, telephone) {
-  // Afficher un message de chargement
-  const btnInscrire = document.getElementById('btn-inscrire');
-  btnInscrire.textContent = '⏳ Connexion...';
-  btnInscrire.disabled = true;
-
-  try {
-    joueurInfo = await inscrireJoueur(nom, telephone);
-    
-    if (!joueurInfo) {
-      alert('Erreur de connexion au serveur. Réessaie dans quelques secondes.');
-      btnInscrire.textContent = '✅ Rejoindre';
-      btnInscrire.disabled = false;
-      return;
-    }
-
-    // Rejoindre via Socket.io
-    socket.emit('rejoindre', {
-      joueurId: joueurInfo._id,
-      nom: joueurInfo.nom
-    });
-
-    afficherEcran(ecranSalle);
-
-  } catch (err) {
-    console.error('Erreur:', err);
-    alert('Erreur. Réessaie !');
-    btnInscrire.textContent = '✅ Rejoindre';
-    btnInscrire.disabled = false;
+  joueurInfo = await inscrireJoueur(nom, telephone);
+  if (!joueurInfo) {
+    alert('Erreur de connexion au serveur. Réessaie.');
+    return;
   }
+
+  // Paiement désactivé pour les tests
+  socket.emit('rejoindre', {
+    joueurId: joueurInfo._id,
+    nom: joueurInfo.nom
+  });
+  afficherEcran(ecranSalle);
 }
 // ===== ECRAN ATTENTE PAIEMENT =====
 function afficherEcranPaiement(transactionId) {
