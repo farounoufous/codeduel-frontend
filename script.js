@@ -608,13 +608,28 @@ return null;
 }
 
 async function rejoindreSalle(nom, telephone) {
-  joueurInfo = await inscrireJoueur(nom, telephone);
-  if (!joueurInfo) {
-    alert('Erreur de connexion au serveur. Réessaie.');
+  // Vérifier d'abord si le socket est connecté
+  if (!socket.connected) {
+    alert('Connexion au serveur en cours... Réessaie dans 30 secondes.');
     return;
   }
 
-  // Paiement désactivé pour les tests
+  // Afficher un message de chargement
+  const btnInscrire = document.getElementById('btn-inscrire');
+  btnInscrire.textContent = '⏳ Connexion...';
+  btnInscrire.disabled = true;
+
+  joueurInfo = await inscrireJoueur(nom, telephone);
+
+  // Réactiver le bouton
+  btnInscrire.textContent = '✅ Rejoindre';
+  btnInscrire.disabled = false;
+
+  if (!joueurInfo) {
+    alert('Erreur de connexion au serveur. Le serveur se réveille, réessaie dans 30 secondes.');
+    return;
+  }
+
   socket.emit('rejoindre', {
     joueurId: joueurInfo._id,
     nom: joueurInfo.nom
