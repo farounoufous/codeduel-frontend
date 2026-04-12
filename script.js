@@ -683,7 +683,15 @@ function afficherQuestion() {
   reponduDeja = false;
   tempsRestant = 10;
 
-  const q = questions[questionActuelle];
+  const qOriginal = questions[questionActuelle];
+const bonneReponse = qOriginal.choix[qOriginal.bonne];
+const choixMelanges = [...qOriginal.choix].sort(() => Math.random() - 0.5);
+const q = {
+  ...qOriginal,
+  choix: choixMelanges,
+  bonne: choixMelanges.indexOf(bonneReponse)
+};
+questions[questionActuelle] = q; 
   numQEl.textContent = 'Question ' + (questionActuelle + 1);
   const pourcentage = (questionActuelle / NB_QUESTIONS) * 100;
   barreEl.style.width = (pourcentage + 5) + '%';
