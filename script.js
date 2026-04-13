@@ -602,43 +602,45 @@ async function rejoindreSalle(nom, telephone) {
   socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
   afficherEcran(ecranSalle);
 }
-// // ===== ECRAN ATTENTE PAIEMENT =====
-// function afficherEcranPaiement(transactionId) {
-//   afficherEcran(ecranPaiement);
 
-//   // Vérifier le paiement toutes les 5 secondes
-//   const verification = setInterval(async () => {
-//     try {
-//       const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
-//       const data = await reponse.json();
+// ===== ECRAN ATTENTE PAIEMENT =====
+function afficherEcranPaiement(transactionId) {
+  afficherEcran(ecranPaiement);
 
-//       if (data.approuve) {
-//         clearInterval(verification);
-//         // Paiement confirmé, rejoindre la salle
-//         socket.emit('rejoindre', {
-//           joueurId: joueurInfo._id,
-//           nom: joueurInfo.nom
-//         });
-//         afficherEcran(ecranSalle);
-//       }
-//     } catch (err) {
-//       console.error('Erreur vérification:', err);
-//     }
-//   }, 5000);
+  // Vérifier le paiement toutes les 5 secondes
+  const verification = setInterval(async () => {
+    try {
+      const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
+      const data = await reponse.json();
+
+      if (data.approuve) {
+        clearInterval(verification);
+        // Paiement confirmé, rejoindre la salle
+        socket.emit('rejoindre', {
+          joueurId: joueurInfo._id,
+          nom: joueurInfo.nom
+        });
+        afficherEcran(ecranSalle);
+      }
+    } catch (err) {
+      console.error('Erreur vérification:', err);
+    }
+  }, 5000);
+}
 
 
 
-// // ===================================================
-// // DEMARRER LE JEU
-// // ===================================================
-// function demarrerJeu() {
-//   questions = tirerQuestions(banqueQuestions, NB_QUESTIONS);
-//   questionActuelle = 0;
-//   score = 0;
-//   scoreEl.textContent = '0';
-//   afficherEcran(ecranJeu);
-//   afficherQuestion();
-// }
+// ===================================================
+// DEMARRER LE JEU
+// ===================================================
+function demarrerJeu() {
+  questions = tirerQuestions(banqueQuestions, NB_QUESTIONS);
+  questionActuelle = 0;
+  score = 0;
+  scoreEl.textContent = '0';
+  afficherEcran(ecranJeu);
+  afficherQuestion();
+}
 
 // ===================================================
 // AFFICHER UNE QUESTION
