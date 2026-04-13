@@ -555,19 +555,6 @@ socket.on('partie-demarree', () => {
   demarrerJeu();
 });
 
-socket.on('classement', (data) => {
-  dernierClassement = data;
-  const liste = document.getElementById('classement-liste');
-  if (!liste) return;
-  liste.innerHTML = data.slice(0, 5).map((j, i) => 
-    '<div class="rang-item">' +
-      '<span class="rang-numero">' + (i===0 ? '🥇' : i===1 ? '🥈' : i===2 ? '🥉' : j.rang+'.') + '</span>' +
-      '<span class="rang-nom">' + j.nom + '</span>' +
-      '<span class="rang-score">' + j.score + ' pts</span>' +
-    '</div>'
-  ).join('');
-});
-
 // ===================================================
 // NAVIGATION ENTRE ECRANS
 // ===================================================
@@ -606,35 +593,32 @@ return null;
     return null;
   }
 }
-
 async function rejoindreSalle(nom, telephone) {
-  // Vérifier d'abord si le socket est connecté
-  if (!socket.connected) {
-    alert('Connexion au serveur en cours... Réessaie dans 30 secondes.');
-    return;
-  }
-
-  // Afficher un message de chargement
   const btnInscrire = document.getElementById('btn-inscrire');
   btnInscrire.textContent = '⏳ Connexion...';
   btnInscrire.disabled = true;
 
   joueurInfo = await inscrireJoueur(nom, telephone);
 
-  // Réactiver le bouton
   btnInscrire.textContent = '✅ Rejoindre';
   btnInscrire.disabled = false;
 
   if (!joueurInfo) {
-    alert('Erreur de connexion au serveur. Le serveur se réveille, réessaie dans 30 secondes.');
+    alert('Serveur en démarrage. Réessaie dans 30 secondes.');
     return;
   }
 
-  socket.emit('rejoindre', {
-    joueurId: joueurInfo._id,
-    nom: joueurInfo.nom
-  });
-  afficherEcran(ecranSalle);
+  const rejoindre = () => {
+    socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
+    afficherEcran(ecranSalle);
+  };
+
+  if (socket.connected) {
+    rejoindre();
+  } else {
+    socket.connect();
+    socket.once('connect', rejoindre);
+  }
 }
 // ===== ECRAN ATTENTE PAIEMENT =====
 function afficherEcranPaiement(transactionId) {
@@ -815,7 +799,7 @@ function afficherPauseClassement() {
   document.body.appendChild(overlay);
 
   // Compte à rebours de 3 secondes
-  let compte = 5;
+  let compte = 3;
   const timer = setInterval(() => {
     compte--;
     const compteEl = document.getElementById('pause-compte');
