@@ -814,10 +814,9 @@ function getClassementLocal() {
   // Utilise le dernier classement reçu du serveur
   return dernierClassement || [{ nom: joueurInfo ? joueurInfo.nom : 'Toi', score: score }];
 }
-
-// ===================================================
+ 
 // AFFICHER LE RESULTAT
-// ===================================================
+
 function afficherResultat() {
   clearInterval(chrono);
   afficherEcran(ecranResultat);
