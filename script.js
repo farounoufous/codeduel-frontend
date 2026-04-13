@@ -1,7 +1,7 @@
 // ===================================================
 // CONNEXION AU SERVEUR
 // ===================================================
-const socket = io('https://codeduel-backend.onrender.com');
+const socket = io('https://codedbyduel-backend.onrender.com');
 
 socket.on('connect', () => {
   console.log('✅ Connecté au serveur');
@@ -568,7 +568,7 @@ function afficherEcran(ecran) {
 // ===================================================
 async function inscrireJoueur(nom, telephone) {
   try {
-    const reponse = await fetch('https://codeduel-backend.onrender.com/api/joueurs/inscription', {
+    const reponse = await fetch('https://codedbyduel-backend.onrender.com/api/joueurs/inscription', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nom, telephone })
@@ -579,7 +579,7 @@ async function inscrireJoueur(nom, telephone) {
       return data.joueur;
     } else {
       // Si déjà inscrit, essayer la connexion
-      const reponse2 = await fetch('https://codeduel-backend.onrender.com/api/joueurs/connexion', {
+      const reponse2 = await fetch('https://codedbyduel-backend.onrender.com/api/joueurs/connexion', {
       method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ telephone })
@@ -601,7 +601,7 @@ async function rejoindreSalle(nom, telephone) {
   }
 
   try {
-    const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/initier', {
+    const reponse = await fetch('https://codedbyduel-backend.onrender.com/api/paiement/initier', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -625,7 +625,7 @@ function afficherEcranPaiement(transactionId) {
   afficherEcran(ecranPaiement);
   const verification = setInterval(async () => {
     try {
-      const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
+      const reponse = await fetch('https://codedbyduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
       const data = await reponse.json();
       if (data.approuve) {
         clearInterval(verification);
