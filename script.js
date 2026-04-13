@@ -596,26 +596,39 @@ return null;
 async function rejoindreSalle(nom, telephone) {
   joueurInfo = await inscrireJoueur(nom, telephone);
   if (!joueurInfo) {
-    alert('Erreur serveur. Réessaie.');
+    alert('Erreur de connexion au serveur. Réessaie.');
     return;
   }
-  socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
-  afficherEcran(ecranSalle);
+
+  try {
+    const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/initier', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        joueurId: joueurInfo._id,
+        telephone: telephone,
+        nom: nom
+      })
+    });
+    const data = await reponse.json();
+    if (data.paiementUrl) {
+      window.open(data.paiementUrl, '_blank');
+      afficherEcranPaiement(data.transactionId);
+    }
+  } catch (err) {
+    console.error('Erreur paiement:', err);
+    alert('Erreur lors du paiement. Réessaie.');
+  }
 }
 
-// ===== ECRAN ATTENTE PAIEMENT =====
 function afficherEcranPaiement(transactionId) {
   afficherEcran(ecranPaiement);
-
-  // Vérifier le paiement toutes les 5 secondes
   const verification = setInterval(async () => {
     try {
       const reponse = await fetch('https://codeduel-backend.onrender.com/api/paiement/verifier/' + transactionId);
       const data = await reponse.json();
-
       if (data.approuve) {
         clearInterval(verification);
-        // Paiement confirmé, rejoindre la salle
         socket.emit('rejoindre', {
           joueurId: joueurInfo._id,
           nom: joueurInfo.nom
