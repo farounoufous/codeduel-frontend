@@ -1,6 +1,4 @@
-// ===================================================
-// CONNEXION AU SERVEUR
-// ===================================================
+
 const socket = io('https://codeduel-backend-w2p6.onrender.com');
 
 socket.on('connect', () => {
@@ -10,7 +8,7 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('🔴 Déconnecté du serveur');
 });
-// Partie terminée
+
 socket.on('partie-terminee', (data) => {
   clearInterval(chrono);
   afficherEcran(ecranResultat);
@@ -26,16 +24,14 @@ socket.on('partie-terminee', (data) => {
     '<div class="resultat-message">' + (estGagnant ? 'Félicitations ! Tu es le meilleur !' : 'Gagnant : ' + gagnant.nom + ' avec ' + gagnant.score + ' pts') + '</div>';
 });
 
-// Salle réinitialisée
+
 socket.on('salle-reinitialise', () => {
   score = 0;
   questionActuelle = 0;
   joueurInfo = null;
   afficherEcran(ecranAccueil);
 });
-// ===================================================
-// BANQUE DE 150 QUESTIONS
-// ===================================================
+// la banque de questions
 const banqueQuestions = [
   { texte: "Quel programme calcule la somme de 1 à 5 ?", choix: [
     "let s=0; for(let i=1;i<=5;i++) s+=i; console.log(s);",
@@ -484,9 +480,9 @@ const banqueQuestions = [
   { texte: "Complète pour créer un constructeur Java :\npublic ___(String marque) { this.marque = marque; }", choix: ["Voiture", "constructor", "init", "new"], bonne: 0, lang: "JAVA" }
 ];
 
-// ===================================================
+
 // TIRAGE ALEATOIRE DE 100 QUESTIONS
-// ===================================================
+
 function tirerQuestions(banque, nombre) {
   const copie = [...banque];
   const tirees = [];
@@ -498,7 +494,7 @@ function tirerQuestions(banque, nombre) {
   return tirees;
 }
 
-// ===================================================
+
 // VARIABLES DU JEU
 // ===================================================
 let questions = [];
@@ -529,10 +525,6 @@ const barreEl         = document.getElementById('barre-remplissage');
 const resultatEl      = document.getElementById('resultat-contenu');
 
 
-// ===================================================
-// SOCKET.IO - EVENEMENTS SERVEUR
-// ===================================================
-
 // Mise à jour de la salle d'attente
 socket.on('mise-a-jour-salle', (data) => {
   const salleJoueurs = document.getElementById('salle-joueurs');
@@ -555,17 +547,12 @@ socket.on('partie-demarree', () => {
   demarrerJeu();
 });
 
-// ===================================================
-// NAVIGATION ENTRE ECRANS
-// ===================================================
 function afficherEcran(ecran) {
   document.querySelectorAll('.ecran').forEach(e => e.classList.remove('actif'));
   ecran.classList.add('actif');
 }
 
-// ===================================================
-// INSCRIPTION DU JOUEUR
-// ===================================================
+
 async function inscrireJoueur(nom, telephone) {
   try {
     const reponse = await fetch('https://codeduel-backend-w2p6.onrender.com/api/joueurs/inscription', {
@@ -593,42 +580,42 @@ return null;
     return null;
   }
 }
-async function rejoindreSalle(nom, telephone) {
-  joueurInfo = await inscrireJoueur(nom, telephone);
-  if (!joueurInfo) {
-    alert('Erreur serveur. Réessaie.');
-    return;
-  }
-  socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
-  afficherEcran(ecranSalle);
-}
 // async function rejoindreSalle(nom, telephone) {
 //   joueurInfo = await inscrireJoueur(nom, telephone);
 //   if (!joueurInfo) {
-//     alert('Erreur de connexion au serveur. Réessaie.');
+//     alert('Erreur serveur. Réessaie.');
 //     return;
 //   }
-
-//   try {
-//     const reponse = await fetch('https://codeduel-backend-w2p6.onrender.com/api/paiement/initier', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//         joueurId: joueurInfo._id,
-//         telephone: telephone,
-//         nom: nom
-//       })
-//     });
-//     const data = await reponse.json();
-//     if (data.paiementUrl) {
-//       window.open(data.paiementUrl, '_blank');
-//       afficherEcranPaiement(data.transactionId);
-//     }
-//   } catch (err) {
-//     console.error('Erreur paiement:', err);
-//     alert('Erreur lors du paiement. Réessaie.');
-//   }
+//   socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
+//   afficherEcran(ecranSalle);
 // }
+async function rejoindreSalle(nom, telephone) {
+  joueurInfo = await inscrireJoueur(nom, telephone);
+  if (!joueurInfo) {
+    alert('Erreur de connexion au serveur. Réessaie.');
+    return;
+  }
+
+  try {
+    const reponse = await fetch('https://codeduel-backend-w2p6.onrender.com/api/paiement/initier', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        joueurId: joueurInfo._id,
+        telephone: telephone,
+        nom: nom
+      })
+    });
+    const data = await reponse.json();
+    if (data.paiementUrl) {
+      window.open(data.paiementUrl, '_blank');
+      afficherEcranPaiement(data.transactionId);
+    }
+  } catch (err) {
+    console.error('Erreur paiement:', err);
+    alert('Erreur lors du paiement. Réessaie.');
+  }
+}
 
 function afficherEcranPaiement(transactionId) {
   afficherEcran(ecranPaiement);
