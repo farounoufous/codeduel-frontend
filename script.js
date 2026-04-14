@@ -502,7 +502,7 @@ const NB_QUESTIONS = 100;
 let questionActuelle = 0;
 let score = 0;
 let chrono;
-let tempsRestant = 10;
+let tempsRestant = 15;
 let reponduDeja = false;
 let joueurInfo = null;
 let dernierClassement = null;
@@ -580,42 +580,42 @@ return null;
     return null;
   }
 }
-// async function rejoindreSalle(nom, telephone) {
-//   joueurInfo = await inscrireJoueur(nom, telephone);
-//   if (!joueurInfo) {
-//     alert('Erreur serveur. Réessaie.');
-//     return;
-//   }
-//   socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
-//   afficherEcran(ecranSalle);
-// }
 async function rejoindreSalle(nom, telephone) {
   joueurInfo = await inscrireJoueur(nom, telephone);
   if (!joueurInfo) {
-    alert('Erreur de connexion au serveur. Réessaie.');
+    alert('Erreur serveur. Réessaie.');
     return;
   }
-
-  try {
-    const reponse = await fetch('https://codeduel-backend-w2p6.onrender.com/api/paiement/initier', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        joueurId: joueurInfo._id,
-        telephone: telephone,
-        nom: nom
-      })
-    });
-    const data = await reponse.json();
-    if (data.paiementUrl) {
-      window.open(data.paiementUrl, '_blank');
-      afficherEcranPaiement(data.transactionId);
-    }
-  } catch (err) {
-    console.error('Erreur paiement:', err);
-    alert('Erreur lors du paiement. Réessaie.');
-  }
+  socket.emit('rejoindre', { joueurId: joueurInfo._id, nom: joueurInfo.nom });
+  afficherEcran(ecranSalle);
 }
+// async function rejoindreSalle(nom, telephone) {
+//   joueurInfo = await inscrireJoueur(nom, telephone);
+//   if (!joueurInfo) {
+//     alert('Erreur de connexion au serveur. Réessaie.');
+//     return;
+//   }
+
+//   try {
+//     const reponse = await fetch('https://codeduel-backend-w2p6.onrender.com/api/paiement/initier', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         joueurId: joueurInfo._id,
+//         telephone: telephone,
+//         nom: nom
+//       })
+//     });
+//     const data = await reponse.json();
+//     if (data.paiementUrl) {
+//       window.open(data.paiementUrl, '_blank');
+//       afficherEcranPaiement(data.transactionId);
+//     }
+//   } catch (err) {
+//     console.error('Erreur paiement:', err);
+//     alert('Erreur lors du paiement. Réessaie.');
+//   }
+// }
 
 function afficherEcranPaiement(transactionId) {
   afficherEcran(ecranPaiement);
@@ -656,7 +656,7 @@ function demarrerJeu() {
 // ===================================================
 function afficherQuestion() {
   reponduDeja = false;
-  tempsRestant = 10;
+  tempsRestant = 15;
 
   const qOriginal = questions[questionActuelle];
 const bonneReponse = qOriginal.choix[qOriginal.bonne];
