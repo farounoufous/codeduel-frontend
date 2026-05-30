@@ -636,7 +636,7 @@ socket.on('mise-a-jour-salle', (data) => {
     salleJoueurs.innerHTML = data.joueurs
       .map(j => '👤 ' + j.nom + ' ') .join('');
   }
-  if (salleNombre) salleNombre.textContent = data.nombre + ' / 20';
+  if (salleNombre) salleNombre.textContent = data.nombre + ' 10';
 });
 
 // Compte à rebours avant la partie
