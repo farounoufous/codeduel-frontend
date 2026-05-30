@@ -1141,13 +1141,17 @@ socket.on('mise-a-jour-salle', (data) => {
   }
 
   if (bouton) {
-    const jesuisHote     = data.hote === socket.id;
-    const assezDeJoueurs = data.nombre >= data.requis;
+    const jesuisHote = data.hote === socket.id;
+
     bouton.style.display = jesuisHote ? 'block' : 'none';
-    bouton.disabled      = !assezDeJoueurs;
-    bouton.textContent   = assezDeJoueurs
+
+    // ← Le bouton est TOUJOURS actif pour l'hôte
+    bouton.disabled = false;
+
+    const assezDeJoueurs = data.nombre >= data.requis;
+    bouton.textContent = assezDeJoueurs
       ? '🚀 Lancer la partie'
-      : `En attente... (${data.nombre}/${data.requis})`;
+      : `🚀 Lancer (${data.nombre} joueur${data.nombre > 1 ? 's' : ''})`;
   }
 });
 
