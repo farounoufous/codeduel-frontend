@@ -24,10 +24,12 @@ socket.on('mise-a-jour-salle', (data) => {
 });
 
 // Clic sur le bouton
-document.getElementById('btn-lancer').addEventListener('click', () => {
-  socket.emit('lancer-partie');
-});
-
+const btnLancer = document.getElementById('btn-lancer');
+if (btnLancer) {
+  btnLancer.addEventListener('click', () => {
+    socket.emit('lancer-partie');
+  });
+}
 // Erreur reçue du serveur
 socket.on('erreur', (data) => {
   alert(data.message);
