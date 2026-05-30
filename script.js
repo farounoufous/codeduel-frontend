@@ -583,8 +583,6 @@ const banqueQuestions =[
   // { texte: "Complète pour la taille d'une ArrayList en Java :\nint n = liste.___();", choix: ["size", "length", "count", "total"], bonne: 0, lang: "JAVA" },
   // { texte: "Complète pour générer un nombre aléatoire en Java :\nMath.___()", choix: ["random", "rand", "random(0,1)", "getRandom"], bonne: 0, lang: "JAVA" },
   // { texte: "Complète pour créer un constructeur Java :\npublic ___(String marque) { this.marque = marque; }", choix: ["Voiture", "constructor", "init", "new"], bonne: 0, lang: "JAVA" }
-];
-
 
 // TIRAGE ALEATOIRE DE 100 QUESTIONS
 
