@@ -8,6 +8,30 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
   console.log('🔴 Déconnecté du serveur');
 });
+// À la réception de mise-a-jour-salle
+socket.on('mise-a-jour-salle', (data) => {
+  const monSocketId = socket.id;
+  const jesuisHote = data.hote === monSocketId;
+  const assezDeJoueurs = data.nombre >= data.requis;
+
+  // Afficher ou cacher le bouton
+  const bouton = document.getElementById('btn-lancer');
+  bouton.style.display = jesuisHote ? 'block' : 'none';
+  bouton.disabled = !assezDeJoueurs;
+  bouton.textContent = assezDeJoueurs
+    ? '🚀 Lancer la partie'
+    : `En attente... (${data.nombre}/${data.requis})`;
+});
+
+// Clic sur le bouton
+document.getElementById('btn-lancer').addEventListener('click', () => {
+  socket.emit('lancer-partie');
+});
+
+// Erreur reçue du serveur
+socket.on('erreur', (data) => {
+  alert(data.message);
+});
 
 socket.on('partie-terminee', (data) => {
   clearInterval(chrono);
@@ -1033,6 +1057,7 @@ socket.on('nouveau-message', (data) => {
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
+
 
 // ===== CLASSEMENT LIVE PENDANT JEU =====
 socket.on('classement', (data) => {
