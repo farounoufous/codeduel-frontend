@@ -32,7 +32,6 @@ socket.on('salle-reinitialise', () => {
   afficherEcran(ecranAccueil);
 });
 // la banque de questions
-const banqueQuestions =
 const banqueQuestions =[
   { texte: "Quelle propriété définit la couleur du texte ?", choix: ["color", "text-color", "font-color", "foreground"], bonne: 0, lang: "CSS" },
   { texte: "Quelle propriété change la couleur d'arrière-plan ?", choix: ["background", "background-color", "bg-color", "fill-color"], bonne: 1, lang: "CSS" },
